@@ -1,6 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
-import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import React from "react";
 import { Platform, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
@@ -41,12 +40,7 @@ export default function ProfileScreen() {
   ];
 
   return (
-    <LinearGradient
-      colors={[Colors.mint, Colors.white]}
-      start={{ x: 0, y: 0 }}
-      end={{ x: 0, y: 0.55 }}
-      style={styles.container}
-    >
+    <View style={styles.container}>
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={[styles.scroll, { paddingTop: topInset + 8, paddingBottom: bottomInset + 120 }]}
@@ -168,12 +162,12 @@ export default function ProfileScreen() {
           <Text style={styles.signOutText}>Sign Out</Text>
         </Pressable>
       </ScrollView>
-    </LinearGradient>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1 },
+  container: { flex: 1, backgroundColor: "#FFFFFF" },
   scroll: { flexGrow: 1, paddingHorizontal: 18, gap: 16 },
   profileCard: { gap: 16 },
   profileTop: { flexDirection: "row", gap: 14, alignItems: "center" },
