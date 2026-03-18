@@ -4,12 +4,12 @@ import { StyleSheet, Text, View } from "react-native";
 import { Colors } from "@/constants/colors";
 import type { Payout, TriggerType } from "@/context/AppContext";
 
-const triggerIcons: Record<TriggerType, { icon: string; color: string }> = {
-  aqi: { icon: "cloudy", color: Colors.trigger.aqi },
-  rain: { icon: "rainy", color: Colors.trigger.rain },
-  heat: { icon: "thermometer", color: Colors.trigger.heat },
-  curfew: { icon: "warning", color: Colors.trigger.curfew },
-  flood: { icon: "water", color: Colors.trigger.flood },
+const triggerIcons: Record<TriggerType, { icon: string; color: string; bg: string }> = {
+  aqi: { icon: "cloudy", color: "#fff", bg: Colors.trigger.aqi },
+  rain: { icon: "rainy", color: "#fff", bg: Colors.trigger.rain },
+  heat: { icon: "thermometer", color: "#fff", bg: Colors.trigger.heat },
+  curfew: { icon: "warning", color: "#fff", bg: Colors.trigger.curfew },
+  flood: { icon: "water", color: "#fff", bg: Colors.trigger.flood },
 };
 
 interface PayoutCardProps {
@@ -27,23 +27,20 @@ export function PayoutCard({ payout }: PayoutCardProps) {
 
   return (
     <View style={styles.card}>
-      <View style={[styles.iconBox, { backgroundColor: icon.color + "18" }]}>
-        <Ionicons name={icon.icon as any} size={22} color={icon.color} />
+      <View style={[styles.iconBox, { backgroundColor: icon.bg }]}>
+        <Ionicons name={icon.icon as any} size={20} color={icon.color} />
       </View>
 
       <View style={styles.content}>
-        <Text style={styles.reason} numberOfLines={1}>
-          {payout.reason}
-        </Text>
-        <Text style={styles.date}>{dateStr}</Text>
-        <Text style={styles.upi} numberOfLines={1}>
-          UPI Ref: {payout.upiRef}
-        </Text>
+        <Text style={styles.reason} numberOfLines={1}>{payout.reason}</Text>
+        <Text style={styles.date}>{dateStr} · {payout.upiRef}</Text>
       </View>
 
       <View style={styles.amountBox}>
         <Text style={styles.amount}>+₹{payout.amount}</Text>
-        <View style={styles.successDot} />
+        <View style={styles.paidBadge}>
+          <Text style={styles.paidText}>PAID</Text>
+        </View>
       </View>
     </View>
   );
@@ -54,51 +51,55 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 12,
-    backgroundColor: Colors.surface,
-    borderRadius: 14,
+    backgroundColor: Colors.white,
+    borderRadius: 20,
     padding: 14,
-    borderWidth: 1,
-    borderColor: Colors.border,
+    borderWidth: 2,
+    borderColor: Colors.charcoal,
+    shadowColor: Colors.charcoal,
+    shadowOffset: { width: 3, height: 3 },
+    shadowOpacity: 1,
+    shadowRadius: 0,
+    elevation: 3,
   },
   iconBox: {
     width: 44,
     height: 44,
     borderRadius: 12,
+    borderWidth: 2,
+    borderColor: Colors.charcoal,
     alignItems: "center",
     justifyContent: "center",
   },
-  content: {
-    flex: 1,
-    gap: 2,
-  },
+  content: { flex: 1, gap: 3 },
   reason: {
     fontSize: 14,
-    fontFamily: "Inter_600SemiBold",
-    color: Colors.text,
+    fontFamily: "Inter_700Bold",
+    color: Colors.charcoal,
   },
   date: {
-    fontSize: 12,
-    fontFamily: "Inter_400Regular",
-    color: Colors.textMuted,
-  },
-  upi: {
     fontSize: 11,
     fontFamily: "Inter_400Regular",
     color: Colors.textMuted,
   },
-  amountBox: {
-    alignItems: "flex-end",
-    gap: 4,
-  },
+  amountBox: { alignItems: "flex-end", gap: 4 },
   amount: {
     fontSize: 17,
     fontFamily: "Inter_700Bold",
-    color: Colors.success,
+    color: Colors.charcoal,
   },
-  successDot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: Colors.success,
+  paidBadge: {
+    backgroundColor: Colors.lime,
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    borderRadius: 999,
+    borderWidth: 1.5,
+    borderColor: Colors.charcoal,
+  },
+  paidText: {
+    fontSize: 9,
+    fontFamily: "Inter_700Bold",
+    color: Colors.charcoal,
+    letterSpacing: 0.5,
   },
 });

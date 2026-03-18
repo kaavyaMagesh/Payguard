@@ -3,7 +3,7 @@ import * as Haptics from "expo-haptics";
 import React from "react";
 import { Platform, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Colors } from "@/constants/colors";
-import type { Policy, PolicyTier } from "@/context/AppContext";
+import type { PolicyTier } from "@/context/AppContext";
 
 interface PolicyCardProps {
   tier: PolicyTier;
@@ -14,55 +14,33 @@ interface PolicyCardProps {
   current?: boolean;
 }
 
-const tierConfig: Record<
-  PolicyTier,
-  { label: string; color: string; bg: string; features: string[] }
-> = {
+const tierConfig: Record<PolicyTier, { label: string; bg: string; textColor: string; features: string[] }> = {
   basic: {
     label: "Basic",
-    color: Colors.tier.basic.badge,
-    bg: Colors.tier.basic.bg,
+    bg: Colors.mint,
+    textColor: Colors.charcoal,
     features: ["₹1,000 coverage", "3 triggers", "Weekly auto-renew"],
   },
   standard: {
     label: "Standard",
-    color: Colors.tier.standard.badge,
-    bg: Colors.tier.standard.bg,
-    features: [
-      "₹2,500 coverage",
-      "5 triggers",
-      "Weekly auto-renew",
-      "Pre-emptive alerts",
-    ],
+    bg: Colors.lime,
+    textColor: Colors.charcoal,
+    features: ["₹2,500 coverage", "5 triggers", "Weekly auto-renew", "Pre-emptive alerts"],
   },
   premium: {
     label: "Premium",
-    color: Colors.tier.premium.badge,
-    bg: Colors.tier.premium.bg,
-    features: [
-      "₹5,000 coverage",
-      "5 triggers + extras",
-      "Streak discounts",
-      "Micro top-ups",
-      "Priority payout",
-    ],
+    bg: Colors.charcoal,
+    textColor: Colors.lime,
+    features: ["₹5,000 coverage", "5 triggers + extras", "Streak discounts", "Micro top-ups", "Priority payout"],
   },
 };
 
-export function PolicyCard({
-  tier,
-  weeklyPremium,
-  coverageAmount,
-  selected = false,
-  onSelect,
-  current = false,
-}: PolicyCardProps) {
+export function PolicyCard({ tier, weeklyPremium, coverageAmount, selected = false, onSelect, current = false }: PolicyCardProps) {
   const config = tierConfig[tier];
+  const isPremium = tier === "premium";
 
   const handlePress = () => {
-    if (Platform.OS !== "web") {
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    }
+    if (Platform.OS !== "web") Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     onSelect?.();
   };
 
@@ -70,49 +48,49 @@ export function PolicyCard({
     <TouchableOpacity
       style={[
         styles.card,
-        selected && { borderColor: config.color, borderWidth: 2 },
-        !selected && { borderColor: Colors.border, borderWidth: 1 },
+        { backgroundColor: config.bg },
+        selected && styles.cardSelected,
       ]}
       onPress={handlePress}
-      activeOpacity={0.85}
+      activeOpacity={0.88}
     >
       {current && (
-        <View style={[styles.currentBadge, { backgroundColor: config.color }]}>
-          <Text style={styles.currentLabel}>Active</Text>
+        <View style={[styles.currentBadge, { backgroundColor: isPremium ? Colors.lime : Colors.charcoal }]}>
+          <Text style={[styles.currentLabel, { color: isPremium ? Colors.charcoal : Colors.lime }]}>ACTIVE</Text>
         </View>
       )}
 
-      <View style={[styles.header, { backgroundColor: config.bg }]}>
-        <Text style={[styles.tierName, { color: config.color }]}>
-          {config.label}
-        </Text>
-        <View style={styles.priceRow}>
-          <Text style={styles.rupee}>₹</Text>
-          <Text style={[styles.price, { color: config.color }]}>
-            {weeklyPremium}
-          </Text>
-          <Text style={styles.period}>/week</Text>
+      <View style={styles.header}>
+        <View style={[styles.tierTag, { backgroundColor: isPremium ? Colors.lime : Colors.charcoal }]}>
+          <Text style={[styles.tierName, { color: isPremium ? Colors.charcoal : Colors.lime }]}>{config.label}</Text>
         </View>
-        <Text style={styles.coverage}>up to ₹{coverageAmount.toLocaleString("en-IN")} coverage</Text>
+        <View style={styles.priceRow}>
+          <Text style={[styles.rupee, { color: config.textColor }]}>₹</Text>
+          <Text style={[styles.price, { color: config.textColor }]}>{weeklyPremium}</Text>
+          <Text style={[styles.period, { color: isPremium ? "rgba(200,255,0,0.6)" : Colors.charcoalMid }]}>/wk</Text>
+        </View>
+        <Text style={[styles.coverage, { color: isPremium ? "rgba(200,255,0,0.7)" : Colors.charcoalMid }]}>
+          Up to ₹{coverageAmount.toLocaleString("en-IN")} covered
+        </Text>
       </View>
+
+      <View style={[styles.divider, { backgroundColor: isPremium ? "rgba(200,255,0,0.2)" : "rgba(0,0,0,0.1)" }]} />
 
       <View style={styles.features}>
         {config.features.map((f, i) => (
           <View key={i} style={styles.featureRow}>
-            <Ionicons
-              name="checkmark-circle"
-              size={16}
-              color={config.color}
-            />
-            <Text style={styles.featureText}>{f}</Text>
+            <View style={[styles.check, { backgroundColor: isPremium ? Colors.lime : Colors.charcoal }]}>
+              <Ionicons name="checkmark" size={10} color={isPremium ? Colors.charcoal : Colors.lime} />
+            </View>
+            <Text style={[styles.featureText, { color: config.textColor }]}>{f}</Text>
           </View>
         ))}
       </View>
 
       {selected && (
-        <View style={[styles.selectedFooter, { backgroundColor: config.color }]}>
-          <Text style={styles.selectedText}>Selected Plan</Text>
-          <Ionicons name="checkmark" size={16} color="#fff" />
+        <View style={[styles.selectedPill, { backgroundColor: isPremium ? Colors.lime : Colors.charcoal }]}>
+          <Text style={[styles.selectedText, { color: isPremium ? Colors.charcoal : Colors.lime }]}>Selected</Text>
+          <Ionicons name="checkmark-circle" size={14} color={isPremium ? Colors.charcoal : Colors.lime} />
         </View>
       )}
     </TouchableOpacity>
@@ -121,89 +99,118 @@ export function PolicyCard({
 
 const styles = StyleSheet.create({
   card: {
-    borderRadius: 16,
+    borderRadius: 28,
     overflow: "hidden",
-    backgroundColor: Colors.surface,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.06,
-    shadowRadius: 8,
-    elevation: 2,
+    borderWidth: 2,
+    borderColor: Colors.charcoal,
+    shadowColor: Colors.charcoal,
+    shadowOffset: { width: 4, height: 4 },
+    shadowOpacity: 1,
+    shadowRadius: 0,
+    elevation: 4,
+  },
+  cardSelected: {
+    shadowOffset: { width: 6, height: 6 },
   },
   currentBadge: {
     position: "absolute",
-    top: 12,
-    right: 12,
+    top: 14,
+    right: 14,
     paddingHorizontal: 10,
     paddingVertical: 4,
-    borderRadius: 20,
+    borderRadius: 999,
+    borderWidth: 1.5,
+    borderColor: Colors.charcoal,
     zIndex: 10,
   },
   currentLabel: {
-    color: "#fff",
-    fontSize: 10,
-    fontFamily: "Inter_600SemiBold",
+    fontSize: 9,
+    fontFamily: "Inter_700Bold",
+    letterSpacing: 1,
   },
   header: {
-    padding: 16,
-    alignItems: "flex-start",
+    padding: 20,
+    gap: 4,
+  },
+  tierTag: {
+    alignSelf: "flex-start",
+    paddingHorizontal: 12,
+    paddingVertical: 4,
+    borderRadius: 999,
+    borderWidth: 1.5,
+    borderColor: Colors.charcoal,
+    marginBottom: 8,
   },
   tierName: {
-    fontSize: 14,
+    fontSize: 11,
     fontFamily: "Inter_700Bold",
+    letterSpacing: 1.2,
     textTransform: "uppercase",
-    letterSpacing: 1,
-    marginBottom: 4,
   },
   priceRow: {
     flexDirection: "row",
     alignItems: "baseline",
-    gap: 2,
+    gap: 1,
   },
   rupee: {
-    fontSize: 18,
-    fontFamily: "Inter_600SemiBold",
-    color: Colors.text,
+    fontSize: 20,
+    fontFamily: "Inter_700Bold",
   },
   price: {
-    fontSize: 36,
+    fontSize: 42,
     fontFamily: "Inter_700Bold",
+    lineHeight: 46,
   },
   period: {
     fontSize: 14,
-    fontFamily: "Inter_400Regular",
-    color: Colors.textSecondary,
+    fontFamily: "Inter_500Medium",
+    marginLeft: 2,
   },
   coverage: {
     fontSize: 12,
-    fontFamily: "Inter_400Regular",
-    color: Colors.textSecondary,
+    fontFamily: "Inter_500Medium",
     marginTop: 2,
   },
+  divider: {
+    height: 1.5,
+    marginHorizontal: 20,
+  },
   features: {
-    padding: 16,
-    gap: 8,
+    padding: 20,
+    gap: 10,
   },
   featureRow: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 8,
+    gap: 10,
+  },
+  check: {
+    width: 18,
+    height: 18,
+    borderRadius: 5,
+    borderWidth: 1.5,
+    borderColor: Colors.charcoal,
+    alignItems: "center",
+    justifyContent: "center",
   },
   featureText: {
     fontSize: 14,
-    fontFamily: "Inter_400Regular",
-    color: Colors.text,
+    fontFamily: "Inter_500Medium",
   },
-  selectedFooter: {
+  selectedPill: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
     gap: 6,
+    marginHorizontal: 20,
+    marginBottom: 20,
     paddingVertical: 10,
+    borderRadius: 999,
+    borderWidth: 1.5,
+    borderColor: Colors.charcoal,
   },
   selectedText: {
-    color: "#fff",
     fontSize: 13,
-    fontFamily: "Inter_600SemiBold",
+    fontFamily: "Inter_700Bold",
   },
 });

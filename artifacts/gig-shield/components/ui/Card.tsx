@@ -14,6 +14,7 @@ interface CardProps extends Omit<TouchableOpacityProps, "style"> {
   onPress?: () => void;
   padding?: number;
   radius?: number;
+  variant?: "default" | "lime" | "dark" | "mint" | "outline";
 }
 
 export function Card({
@@ -21,35 +22,59 @@ export function Card({
   style,
   onPress,
   padding = 16,
-  radius = 16,
+  radius = 32,
+  variant = "default",
   ...rest
 }: CardProps) {
+  const bgColor = {
+    default: Colors.white,
+    lime: Colors.lime,
+    dark: Colors.charcoal,
+    mint: Colors.mint,
+    outline: "transparent",
+  }[variant];
+
+  const borderColor = {
+    default: Colors.charcoal,
+    lime: Colors.charcoal,
+    dark: Colors.charcoal,
+    mint: Colors.charcoal,
+    outline: Colors.charcoal,
+  }[variant];
+
+  const baseStyle = [
+    styles.card,
+    {
+      padding,
+      borderRadius: radius,
+      backgroundColor: bgColor,
+      borderColor,
+    },
+    style,
+  ];
+
   if (onPress) {
     return (
       <TouchableOpacity
-        style={[styles.card, { padding, borderRadius: radius }, style]}
+        style={baseStyle}
         onPress={onPress}
-        activeOpacity={0.85}
+        activeOpacity={0.88}
         {...rest}
       >
         {children}
       </TouchableOpacity>
     );
   }
-  return (
-    <View style={[styles.card, { padding, borderRadius: radius }, style]}>
-      {children}
-    </View>
-  );
+  return <View style={baseStyle}>{children}</View>;
 }
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: Colors.surface,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.07,
-    shadowRadius: 8,
-    elevation: 3,
+    borderWidth: 2,
+    shadowColor: Colors.shadow,
+    shadowOffset: { width: 4, height: 4 },
+    shadowOpacity: 1,
+    shadowRadius: 0,
+    elevation: 4,
   },
 });

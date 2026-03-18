@@ -12,38 +12,33 @@ interface AlertBannerProps {
 export function AlertBanner({ message, type, subtitle }: AlertBannerProps) {
   const config = {
     warning: {
-      bg: "#FFF8E1",
-      border: Colors.warning,
+      bg: "#FFF3CD",
+      border: Colors.charcoal,
       icon: "warning",
-      color: "#F57F17",
+      iconColor: "#FF9500",
+      dot: "#FF9500",
     },
     success: {
-      bg: Colors.primaryLight,
-      border: Colors.primary,
+      bg: Colors.lime,
+      border: Colors.charcoal,
       icon: "checkmark-circle",
-      color: Colors.primaryDark,
+      iconColor: Colors.charcoal,
+      dot: Colors.charcoal,
     },
     info: {
-      bg: "#E3F2FD",
-      border: Colors.info,
+      bg: Colors.mint,
+      border: Colors.charcoal,
       icon: "information-circle",
-      color: Colors.info,
+      iconColor: Colors.charcoal,
+      dot: Colors.charcoal,
     },
   }[type];
 
   return (
-    <View
-      style={[
-        styles.container,
-        {
-          backgroundColor: config.bg,
-          borderLeftColor: config.border,
-        },
-      ]}
-    >
-      <Ionicons name={config.icon as any} size={20} color={config.color} />
+    <View style={[styles.container, { backgroundColor: config.bg, borderColor: config.border }]}>
+      <Ionicons name={config.icon as any} size={20} color={config.iconColor} />
       <View style={styles.text}>
-        <Text style={[styles.message, { color: config.color }]}>{message}</Text>
+        <Text style={styles.message}>{message}</Text>
         {subtitle && <Text style={styles.subtitle}>{subtitle}</Text>}
       </View>
     </View>
@@ -56,21 +51,24 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     gap: 10,
     padding: 14,
-    borderRadius: 12,
-    borderLeftWidth: 4,
+    borderRadius: 20,
+    borderWidth: 2,
+    shadowColor: Colors.charcoal,
+    shadowOffset: { width: 3, height: 3 },
+    shadowOpacity: 1,
+    shadowRadius: 0,
+    elevation: 3,
   },
-  text: {
-    flex: 1,
-    gap: 2,
-  },
+  text: { flex: 1, gap: 2 },
   message: {
     fontSize: 13,
-    fontFamily: "Inter_600SemiBold",
+    fontFamily: "Inter_700Bold",
+    color: Colors.charcoal,
   },
   subtitle: {
     fontSize: 12,
     fontFamily: "Inter_400Regular",
-    color: Colors.textSecondary,
+    color: Colors.charcoalMid,
     lineHeight: 18,
   },
 });

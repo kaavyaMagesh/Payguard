@@ -1,3 +1,4 @@
+import { Ionicons } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
 import React from "react";
 import {
@@ -13,12 +14,12 @@ import { Colors } from "@/constants/colors";
 interface ButtonProps {
   label: string;
   onPress: () => void;
-  variant?: "primary" | "secondary" | "ghost" | "danger";
+  variant?: "primary" | "secondary" | "dark" | "danger" | "outline";
   loading?: boolean;
   disabled?: boolean;
   style?: ViewStyle;
   fullWidth?: boolean;
-  icon?: React.ReactNode;
+  trailingIcon?: string;
 }
 
 export function Button({
@@ -29,27 +30,37 @@ export function Button({
   disabled = false,
   style,
   fullWidth = true,
-  icon,
+  trailingIcon = "arrow-forward",
 }: ButtonProps) {
   const handlePress = () => {
     if (Platform.OS !== "web") {
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     }
     onPress();
   };
 
   const bg = {
-    primary: Colors.primary,
-    secondary: Colors.surfaceSecondary,
-    ghost: "transparent",
+    primary: Colors.lime,
+    secondary: Colors.white,
+    dark: Colors.charcoal,
     danger: Colors.danger,
+    outline: "transparent",
   }[variant];
 
   const textColor = {
-    primary: "#fff",
-    secondary: Colors.text,
-    ghost: Colors.primary,
-    danger: "#fff",
+    primary: Colors.charcoal,
+    secondary: Colors.charcoal,
+    dark: Colors.lime,
+    danger: Colors.white,
+    outline: Colors.charcoal,
+  }[variant];
+
+  const borderColor = {
+    primary: Colors.charcoal,
+    secondary: Colors.charcoal,
+    dark: Colors.charcoal,
+    danger: Colors.charcoal,
+    outline: Colors.charcoal,
   }[variant];
 
   return (
@@ -58,7 +69,15 @@ export function Button({
       disabled={disabled || loading}
       style={({ pressed }) => [
         styles.btn,
-        { backgroundColor: bg, opacity: pressed ? 0.88 : disabled ? 0.5 : 1 },
+        {
+          backgroundColor: bg,
+          borderColor,
+          opacity: disabled ? 0.5 : 1,
+          transform: pressed ? [{ translateY: 2 }, { translateX: 2 }] : [],
+          shadowOffset: pressed
+            ? { width: 2, height: 2 }
+            : { width: 4, height: 4 },
+        },
         fullWidth && styles.fullWidth,
         style,
       ]}
@@ -67,8 +86,8 @@ export function Button({
         <ActivityIndicator color={textColor} size="small" />
       ) : (
         <>
-          {icon}
           <Text style={[styles.label, { color: textColor }]}>{label}</Text>
+          <Ionicons name={trailingIcon as any} size={18} color={textColor} />
         </>
       )}
     </Pressable>
@@ -82,15 +101,20 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     gap: 8,
     paddingVertical: 16,
-    paddingHorizontal: 24,
-    borderRadius: 14,
+    paddingHorizontal: 28,
+    borderRadius: 999,
+    borderWidth: 2,
+    shadowColor: Colors.charcoal,
+    shadowOpacity: 1,
+    shadowRadius: 0,
+    elevation: 4,
   },
   fullWidth: {
     width: "100%",
   },
   label: {
     fontSize: 16,
-    fontFamily: "Inter_600SemiBold",
-    letterSpacing: 0.2,
+    fontFamily: "Inter_700Bold",
+    letterSpacing: 0.3,
   },
 });

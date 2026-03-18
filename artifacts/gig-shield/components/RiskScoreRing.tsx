@@ -1,5 +1,5 @@
-import React, { useEffect, useRef } from "react";
-import { Animated, StyleSheet, Text, View } from "react-native";
+import React from "react";
+import { StyleSheet, Text, View } from "react-native";
 import { Colors } from "@/constants/colors";
 
 interface RiskScoreRingProps {
@@ -8,70 +8,24 @@ interface RiskScoreRingProps {
 }
 
 export function RiskScoreRing({ score, size = 100 }: RiskScoreRingProps) {
-  const animVal = useRef(new Animated.Value(0)).current;
-
-  useEffect(() => {
-    Animated.timing(animVal, {
-      toValue: score,
-      duration: 1000,
-      useNativeDriver: false,
-    }).start();
-  }, [score]);
-
   const getColor = (s: number) => {
-    if (s < 40) return Colors.success;
+    if (s < 40) return Colors.lime;
     if (s < 70) return Colors.warning;
     return Colors.danger;
   };
 
   const getLabel = (s: number) => {
-    if (s < 40) return "Low Risk";
-    if (s < 70) return "Moderate";
-    return "High Risk";
+    if (s < 40) return "LOW RISK";
+    if (s < 70) return "MODERATE";
+    return "HIGH RISK";
   };
 
   const color = getColor(score);
-  const strokeWidth = 8;
-  const radius = (size - strokeWidth) / 2;
-  const circumference = 2 * Math.PI * radius;
-  const strokeDashoffset = circumference - (score / 100) * circumference;
 
   return (
-    <View style={[styles.container, { width: size, height: size }]}>
-      <View style={styles.svgPlaceholder}>
-        <View
-          style={[
-            styles.ring,
-            {
-              width: size,
-              height: size,
-              borderRadius: size / 2,
-              borderWidth: strokeWidth,
-              borderColor: Colors.border,
-            },
-          ]}
-        />
-        <View
-          style={[
-            styles.ring,
-            styles.ringFill,
-            {
-              width: size,
-              height: size,
-              borderRadius: size / 2,
-              borderWidth: strokeWidth,
-              borderColor: color,
-              borderTopColor: "transparent",
-              borderRightColor: score > 50 ? color : "transparent",
-              transform: [{ rotate: "-90deg" }],
-            },
-          ]}
-        />
-      </View>
-      <View style={styles.label}>
-        <Text style={[styles.score, { color }]}>{score}</Text>
-        <Text style={styles.riskLabel}>{getLabel(score)}</Text>
-      </View>
+    <View style={[styles.container, { width: size, height: size, borderRadius: size / 2, backgroundColor: color }]}>
+      <Text style={styles.score}>{score}</Text>
+      <Text style={styles.label}>{getLabel(score)}</Text>
     </View>
   );
 }
@@ -80,29 +34,23 @@ const styles = StyleSheet.create({
   container: {
     alignItems: "center",
     justifyContent: "center",
-    position: "relative",
-  },
-  svgPlaceholder: {
-    position: "absolute",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  ring: {
-    position: "absolute",
-  },
-  ringFill: {
-    position: "absolute",
-  },
-  label: {
-    alignItems: "center",
+    borderWidth: 2.5,
+    borderColor: Colors.charcoal,
+    shadowColor: Colors.charcoal,
+    shadowOffset: { width: 3, height: 3 },
+    shadowOpacity: 1,
+    shadowRadius: 0,
+    elevation: 3,
   },
   score: {
-    fontSize: 26,
+    fontSize: 24,
     fontFamily: "Inter_700Bold",
+    color: Colors.charcoal,
   },
-  riskLabel: {
-    fontSize: 10,
-    fontFamily: "Inter_500Medium",
-    color: Colors.textSecondary,
+  label: {
+    fontSize: 8,
+    fontFamily: "Inter_700Bold",
+    color: Colors.charcoal,
+    letterSpacing: 0.5,
   },
 });
