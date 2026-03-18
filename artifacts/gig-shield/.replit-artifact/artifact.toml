@@ -1,0 +1,27 @@
+kind = "mobile"
+previewPath = "/"
+title = "GigShield - Gig Worker Insurance"
+version = "1.0.0"
+id = "artifacts/gig-shield"
+router = "expo-domain"
+
+[[integratedSkills]]
+name = "expo"
+version = "1.0.0"
+
+[[services]]
+ensurePreviewReachable = "/status"
+localPort = 22658
+name = "expo"
+paths = ["/"]
+
+[services.development]
+run = "pnpm --filter @workspace/gig-shield run dev"
+
+[services.env]
+PORT = "22658"
+BASE_PATH = "/"
+
+[services.production]
+build = ["pnpm", "--filter", "@workspace/gig-shield", "run", "build"]
+run = ["pnpm", "--filter", "@workspace/gig-shield", "run", "serve"]

@@ -1,0 +1,114 @@
+MUST-HAVES
+1. Optimized Onboarding
+
+Voice-based registration in Hindi/Tamil/Telugu
+8+ Indian language support throughout the app
+Simple 3-step signup: phone number → platform (Swiggy/Zomato/Zepto) → zone
+KYC via Aadhaar + selfie verification
+UPI ID collection for instant payouts
+
+2. AI Risk Profiling
+
+Worker scored based on: delivery zone, working hours, platform, weather history of their area, past claim history
+Hyperlocal pincode-level risk mapping
+Earnings baseline established from platform order data
+Risk score updates weekly
+
+3. Weekly Policy Creation
+
+3 tiers: Basic / Standard / Premium (e.g. ₹29 / ₹49 / ₹79 per week)
+Coverage amount scales with tier
+Auto-renews every week via UPI mandate
+Worker sees exactly what triggers a payout and how much they get
+
+4. Parametric Claim Triggering (Zero-Touch)
+
+3–5 automated triggers monitored in real-time:
+
+AQI crosses 300+ (severe pollution)
+Rainfall exceeds 50mm in 3 hours
+Temperature crosses 45°C
+Government-declared curfew/strike in zone
+Flood alert issued for pincode
+
+
+No claim filing needed — system detects and initiates automatically
+
+5. Payout Processing
+
+Instant UPI transfer within minutes of trigger
+SMS + app notification with payout reason
+Full transaction history in app
+Payout amount = AI-estimated lost earnings for that disruption window
+
+6. Analytics Dashboard (Insurer Side)
+
+Live map of active triggers across cities
+Claims volume, payout amounts, fraud flags
+Zone-wise risk heatmap
+Worker retention and streak metrics
+Premium pool health (collected vs paid out)
+
+
+INNOVATIONS
+7. Live Trigger Dashboard (Worker Side)
+
+Worker sees real-time AQI, rainfall, temperature for their zone
+Progress bar showing how close conditions are to triggering a payout
+"You are 12mm of rain away from a payout" style display
+
+8. Explainable AI
+
+After every trigger (or non-trigger), worker gets plain language explanation
+e.g. "Rain was 38mm in your zone — payout needed 50mm. No payout this time."
+e.g. "AQI hit 320 in Andheri East. ₹180 credited to your UPI."
+
+9. Pre-emptive Alerts
+
+2–3 hour advance warning before predicted trigger event
+"Heavy rain expected in your zone at 4pm. Consider finishing early."
+Helps worker plan their day around disruptions
+
+10. Earnings Prediction Model
+
+AI calculates what worker would have earned during disruption window
+Based on: their personal delivery history, day of week, time of day, zone demand patterns
+Payout = predicted lost earnings (capped at policy limit)
+
+11. Peer Comparison Fraud Detection
+
+GPS data cross-checked across all workers in same zone
+If worker claims but GPS shows they were active — flagged
+If 80% of zone workers claim but only 20% were GPS-inactive — bulk fraud alert
+Duplicate claim prevention across multiple platforms
+
+12. Streak Rewards
+
+Workers who go X weeks without claiming get premium discount
+Encourages enrollment continuity
+Displayed as a streak counter in the app (like Duolingo)
+
+13. Micro Top-Ups
+
+On days with predicted extreme events (cyclone warning, red alert rain)
+Worker can buy single-day extra coverage for ₹5–10
+Available until 6am of that day
+
+14. Savings Pool Model
+
+% of unclaimed premiums pooled annually
+At year end, enrolled workers get partial cashback
+Creates loyalty and long-term retention
+
+15. Group/Fleet Plans
+
+Fleet owner registers all their riders in one flow
+Bulk discount on weekly premiums
+Fleet owner dashboard showing all rider coverage status
+Single UPI debit for entire fleet weekly
+
+16. Platform Integration
+
+Swiggy/Zomato order data (simulated) used to verify earnings baseline
+Actual orders during disruption window cross-checked
+Prevents self-reported earnings inflation in claims
