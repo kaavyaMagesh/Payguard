@@ -7,6 +7,7 @@ import {
   Pressable,
   StyleSheet,
   Text,
+  View,
   ViewStyle,
 } from "react-native";
 import { Colors } from "@/constants/colors";
@@ -14,7 +15,7 @@ import { Colors } from "@/constants/colors";
 interface ButtonProps {
   label: string;
   onPress: () => void;
-  variant?: "primary" | "secondary" | "dark" | "danger" | "outline";
+  variant?: "primary" | "secondary" | "ghost";
   loading?: boolean;
   disabled?: boolean;
   style?: ViewStyle;
@@ -39,29 +40,12 @@ export function Button({
     onPress();
   };
 
-  const bg = {
-    primary: Colors.lime,
-    secondary: Colors.white,
-    dark: Colors.charcoal,
-    danger: Colors.danger,
-    outline: "transparent",
-  }[variant];
+  const isPrimary = variant === "primary";
+  const isGhost = variant === "ghost";
 
-  const textColor = {
-    primary: Colors.charcoal,
-    secondary: Colors.charcoal,
-    dark: Colors.lime,
-    danger: Colors.white,
-    outline: Colors.charcoal,
-  }[variant];
-
-  const borderColor = {
-    primary: Colors.charcoal,
-    secondary: Colors.charcoal,
-    dark: Colors.charcoal,
-    danger: Colors.charcoal,
-    outline: Colors.charcoal,
-  }[variant];
+  const bg = isPrimary ? Colors.charcoal : isGhost ? "transparent" : Colors.white;
+  const textColor = isPrimary ? Colors.white : Colors.charcoal;
+  const borderColor = isGhost ? Colors.charcoalMid : Colors.charcoal;
 
   return (
     <Pressable
@@ -72,22 +56,21 @@ export function Button({
         {
           backgroundColor: bg,
           borderColor,
-          opacity: disabled ? 0.5 : 1,
-          transform: pressed ? [{ translateY: 2 }, { translateX: 2 }] : [],
-          shadowOffset: pressed
-            ? { width: 2, height: 2 }
-            : { width: 4, height: 4 },
+          opacity: disabled ? 0.45 : pressed ? 0.88 : 1,
+          transform: pressed ? [{ scale: 0.98 }] : [],
         },
         fullWidth && styles.fullWidth,
         style,
       ]}
     >
       {loading ? (
-        <ActivityIndicator color={textColor} size="small" />
+        <ActivityIndicator color={textColor} size="small" style={{ flex: 1 }} />
       ) : (
         <>
           <Text style={[styles.label, { color: textColor }]}>{label}</Text>
-          <Ionicons name={trailingIcon as any} size={18} color={textColor} />
+          <View style={styles.iconCircle}>
+            <Ionicons name={trailingIcon as any} size={16} color={Colors.charcoal} />
+          </View>
         </>
       )}
     </Pressable>
@@ -98,16 +81,12 @@ const styles = StyleSheet.create({
   btn: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center",
-    gap: 8,
-    paddingVertical: 16,
-    paddingHorizontal: 28,
+    justifyContent: "space-between",
+    paddingVertical: 14,
+    paddingLeft: 24,
+    paddingRight: 8,
     borderRadius: 999,
-    borderWidth: 2,
-    shadowColor: Colors.charcoal,
-    shadowOpacity: 1,
-    shadowRadius: 0,
-    elevation: 4,
+    borderWidth: 1.5,
   },
   fullWidth: {
     width: "100%",
@@ -115,6 +94,17 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 16,
     fontFamily: "Inter_700Bold",
-    letterSpacing: 0.3,
+    letterSpacing: -0.2,
+    flex: 1,
+    textAlign: "center",
+    marginLeft: 8,
+  },
+  iconCircle: {
+    width: 36,
+    height: 36,
+    borderRadius: 999,
+    backgroundColor: Colors.lime,
+    alignItems: "center",
+    justifyContent: "center",
   },
 });

@@ -1,29 +1,26 @@
 export const Colors = {
-  lime: "#C8FF00",
-  limeDark: "#A8D900",
-  limeLight: "#F0FFB0",
+  lime: "#D4FF00",
+  limeDark: "#AEDD00",
+  limeLight: "#EFFFB0",
   charcoal: "#1A1A1A",
   charcoalLight: "#2D2D2D",
-  charcoalMid: "#4A4A4A",
-  mint: "#D4F5E9",
-  mintLight: "#EBF9F4",
-  mintDark: "#A8E8D0",
+  charcoalMid: "#555555",
+  mint: "#E0F7D4",
+  mintDark: "#C2EDAF",
   white: "#FFFFFF",
-  offWhite: "#F8FFF8",
+  offWhite: "#FAFFFE",
   border: "#1A1A1A",
   shadow: "#1A1A1A",
 
-  primary: "#C8FF00",
-  primaryDark: "#A8D900",
-  primaryLight: "#F0FFB0",
-  accent: "#FF6B35",
-  accentLight: "#FFE8DF",
-  background: "#EDF9F2",
+  primary: "#D4FF00",
+  primaryDark: "#AEDD00",
+  background: "#E0F7D4",
+  backgroundEnd: "#FFFFFF",
   surface: "#FFFFFF",
-  surfaceSecondary: "#F0FBF4",
+  surfaceSecondary: "#F5F5F5",
   text: "#1A1A1A",
-  textSecondary: "#4A4A4A",
-  textMuted: "#7A7A7A",
+  textSecondary: "#555555",
+  textMuted: "#888888",
   success: "#00C853",
   warning: "#FFB300",
   danger: "#FF3B30",
@@ -31,10 +28,19 @@ export const Colors = {
 
   card: "#FFFFFF",
 
+  pastel: {
+    yellow: "#FFFACD",
+    blue: "#E0F0FF",
+    peach: "#FFE8DF",
+    purple: "#EDE0FF",
+    green: "#E0FFF0",
+    pink: "#FFE0F0",
+  },
+
   tier: {
-    basic: { bg: "#E8FFE8", text: "#1A1A1A", badge: "#00C853" },
-    standard: { bg: "#C8FF00", text: "#1A1A1A", badge: "#1A1A1A" },
-    premium: { bg: "#1A1A1A", text: "#C8FF00", badge: "#C8FF00" },
+    basic: { bg: "#E0FFF0", text: "#1A1A1A", badge: "#00C853" },
+    standard: { bg: "#D4FF00", text: "#1A1A1A", badge: "#1A1A1A" },
+    premium: { bg: "#1A1A1A", text: "#D4FF00", badge: "#D4FF00" },
   },
 
   trigger: {
@@ -43,6 +49,11 @@ export const Colors = {
     heat: "#FF9500",
     curfew: "#AF52DE",
     flood: "#32ADE6",
+  },
+
+  chat: {
+    userBg: "#E0F0FF",
+    aiBg: "#FFFFFF",
   },
 };
 

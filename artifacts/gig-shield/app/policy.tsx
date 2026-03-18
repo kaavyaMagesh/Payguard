@@ -1,14 +1,8 @@
 import { Ionicons } from "@expo/vector-icons";
+import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import React, { useState } from "react";
-import {
-  Platform,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import { Platform, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { PolicyCard } from "@/components/PolicyCard";
 import { Button } from "@/components/ui/Button";
@@ -42,28 +36,33 @@ export default function PolicyScreen() {
   const selected = tiers.find((t) => t.tier === selectedTier)!;
 
   return (
-    <View style={styles.container}>
+    <LinearGradient
+      colors={[Colors.mint, Colors.white]}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 0, y: 0.55 }}
+      style={styles.container}
+    >
       <ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={[styles.scroll, { paddingTop: topInset + 12, paddingBottom: bottomInset + 140 }]}
+        contentContainerStyle={[styles.scroll, { paddingTop: topInset + 12, paddingBottom: bottomInset + 150 }]}
       >
         {/* Header */}
         <View style={styles.header}>
           <Pressable onPress={() => router.back()} style={styles.backBtn}>
-            <Ionicons name="arrow-back" size={20} color={Colors.charcoal} />
+            <Ionicons name="arrow-back" size={18} color={Colors.charcoal} />
           </Pressable>
-          <View>
+          <View style={{ flex: 1 }}>
             <Text style={styles.title}>Choose Plan</Text>
-            <Text style={styles.subtitle}>Auto-renews every week via UPI</Text>
+            <Text style={styles.subtitle}>Auto-renews weekly via UPI · Cancel anytime</Text>
           </View>
         </View>
 
-        {/* Info Banner */}
-        <View style={styles.infoBanner}>
-          <Ionicons name="flash" size={18} color={Colors.charcoal} />
-          <Text style={styles.infoText}>
-            Parametric insurance — no claim filing ever. Payouts are fully automatic.
-          </Text>
+        {/* Info pill */}
+        <View style={styles.infoPill}>
+          <View style={styles.infoIcon}>
+            <Ionicons name="flash" size={14} color={Colors.charcoal} />
+          </View>
+          <Text style={styles.infoText}>No claim filing ever. Payouts are fully automatic based on real-time conditions.</Text>
         </View>
 
         {/* Policy Cards */}
@@ -81,106 +80,88 @@ export default function PolicyScreen() {
           ))}
         </View>
 
-        {/* Micro Top-up bento */}
+        {/* Micro Top-up Bento */}
         <View style={styles.topupCard}>
-          <View style={styles.topupHeader}>
-            <View style={styles.newBadge}>
-              <Text style={styles.newBadgeText}>NEW</Text>
+          <View style={styles.topupLeft}>
+            <View style={styles.newPill}>
+              <Text style={styles.newPillText}>NEW</Text>
             </View>
             <Text style={styles.topupTitle}>Micro Top-Ups</Text>
+            <Text style={styles.topupText}>Buy single-day extra coverage for ₹5–10 on extreme weather days. Available until 6 AM.</Text>
           </View>
-          <Text style={styles.topupText}>
-            On extreme weather days, buy single-day extra coverage for just ₹5–10. Available until 6 AM.
-          </Text>
+          <View style={styles.topupIcon}>
+            <Ionicons name="add-circle-outline" size={32} color={Colors.charcoal} />
+          </View>
         </View>
 
         {/* Savings Pool */}
         <View style={styles.savingsCard}>
           <View style={styles.savingsIcon}>
-            <Ionicons name="wallet" size={20} color={Colors.charcoal} />
+            <Ionicons name="wallet-outline" size={18} color={Colors.charcoal} />
           </View>
-          <View style={styles.savingsText}>
+          <View style={{ flex: 1, gap: 3 }}>
             <Text style={styles.savingsTitle}>Annual Savings Pool</Text>
-            <Text style={styles.savingsDesc}>
-              Unclaimed premiums are pooled. Workers with long streaks get year-end cashback.
-            </Text>
+            <Text style={styles.savingsText}>Unclaimed premiums pool at year-end. Workers with long streaks get cashback.</Text>
           </View>
         </View>
       </ScrollView>
 
       {/* Footer CTA */}
       <View style={[styles.footer, { paddingBottom: bottomInset + 16 }]}>
-        <View style={styles.footerInfo}>
-          <Text style={styles.footerLabel}>Selected:</Text>
-          <Text style={styles.footerTier}>{selectedTier.charAt(0).toUpperCase() + selectedTier.slice(1)}</Text>
-          <View style={styles.footerPricePill}>
-            <Text style={styles.footerPrice}>₹{selected.weeklyPremium}/wk</Text>
+        <View style={styles.footerSummary}>
+          <Text style={styles.footerLabel}>Selected plan</Text>
+          <View style={styles.footerPriceRow}>
+            <Text style={styles.footerTier}>{selectedTier.charAt(0).toUpperCase() + selectedTier.slice(1)}</Text>
+            <View style={styles.footerPill}>
+              <Text style={styles.footerPrice}>₹{selected.weeklyPremium}/wk</Text>
+            </View>
           </View>
         </View>
         <Button
           label={saving ? "Activating..." : "Activate Plan"}
           onPress={handleSave}
           loading={saving}
-          variant="dark"
+          variant="primary"
           trailingIcon="flash"
         />
       </View>
-    </View>
+    </LinearGradient>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: Colors.background },
-  scroll: {
-    flexGrow: 1,
-    paddingHorizontal: 18,
-    gap: 16,
-  },
-  header: {
-    flexDirection: "row",
-    alignItems: "flex-start",
-    gap: 14,
-  },
+  container: { flex: 1 },
+  scroll: { flexGrow: 1, paddingHorizontal: 18, gap: 16 },
+  header: { flexDirection: "row", alignItems: "flex-start", gap: 12 },
   backBtn: {
     width: 40,
     height: 40,
     borderRadius: 999,
     backgroundColor: Colors.white,
-    borderWidth: 2,
-    borderColor: Colors.charcoal,
     alignItems: "center",
     justifyContent: "center",
+    borderWidth: 1,
+    borderColor: "rgba(0,0,0,0.07)",
     marginTop: 2,
-    shadowColor: Colors.charcoal,
-    shadowOffset: { width: 3, height: 3 },
-    shadowOpacity: 1,
-    shadowRadius: 0,
-    elevation: 3,
   },
-  title: {
-    fontSize: 28,
-    fontFamily: "Inter_700Bold",
-    color: Colors.charcoal,
-  },
-  subtitle: {
-    fontSize: 13,
-    fontFamily: "Inter_500Medium",
-    color: Colors.charcoalMid,
-  },
-  infoBanner: {
+  title: { fontSize: 26, fontFamily: "Inter_700Bold", color: Colors.charcoal, letterSpacing: -0.5 },
+  subtitle: { fontSize: 12, fontFamily: "Inter_500Medium", color: Colors.charcoalMid, marginTop: 2 },
+  infoPill: {
     flexDirection: "row",
     alignItems: "flex-start",
     gap: 10,
     backgroundColor: Colors.lime,
-    borderRadius: 20,
-    borderWidth: 2,
-    borderColor: Colors.charcoal,
-    padding: 14,
-    shadowColor: Colors.charcoal,
-    shadowOffset: { width: 3, height: 3 },
-    shadowOpacity: 1,
-    shadowRadius: 0,
-    elevation: 3,
+    borderRadius: 999,
+    padding: 12,
+    paddingLeft: 10,
+  },
+  infoIcon: {
+    width: 28,
+    height: 28,
+    borderRadius: 999,
+    backgroundColor: Colors.charcoal,
+    alignItems: "center",
+    justifyContent: "center",
   },
   infoText: {
     flex: 1,
@@ -188,124 +169,67 @@ const styles = StyleSheet.create({
     fontFamily: "Inter_600SemiBold",
     color: Colors.charcoal,
     lineHeight: 20,
+    alignSelf: "center",
   },
   policyList: { gap: 12 },
   topupCard: {
-    backgroundColor: Colors.mint,
-    borderRadius: 24,
-    borderWidth: 2,
-    borderColor: Colors.charcoal,
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: Colors.pastel.blue,
+    borderRadius: 28,
     padding: 18,
-    gap: 10,
-    shadowColor: Colors.charcoal,
-    shadowOffset: { width: 4, height: 4 },
-    shadowOpacity: 1,
-    shadowRadius: 0,
-    elevation: 4,
+    borderWidth: 1,
+    borderColor: "rgba(0,0,0,0.05)",
+    gap: 12,
   },
-  topupHeader: { flexDirection: "row", alignItems: "center", gap: 8 },
-  newBadge: {
+  topupLeft: { flex: 1, gap: 6 },
+  newPill: {
     backgroundColor: Colors.charcoal,
+    alignSelf: "flex-start",
     paddingHorizontal: 8,
     paddingVertical: 3,
     borderRadius: 999,
   },
-  newBadgeText: {
-    fontSize: 9,
-    fontFamily: "Inter_700Bold",
-    color: Colors.lime,
-    letterSpacing: 1,
-  },
-  topupTitle: {
-    fontSize: 16,
-    fontFamily: "Inter_700Bold",
-    color: Colors.charcoal,
-  },
-  topupText: {
-    fontSize: 13,
-    fontFamily: "Inter_400Regular",
-    color: Colors.charcoalMid,
-    lineHeight: 20,
-  },
+  newPillText: { fontSize: 9, fontFamily: "Inter_700Bold", color: Colors.lime, letterSpacing: 1 },
+  topupTitle: { fontSize: 16, fontFamily: "Inter_700Bold", color: Colors.charcoal, letterSpacing: -0.2 },
+  topupText: { fontSize: 12, fontFamily: "Inter_400Regular", color: Colors.charcoalMid, lineHeight: 18 },
+  topupIcon: { opacity: 0.5 },
   savingsCard: {
     flexDirection: "row",
     alignItems: "flex-start",
     gap: 12,
     backgroundColor: Colors.white,
     borderRadius: 24,
-    borderWidth: 2,
-    borderColor: Colors.charcoal,
-    padding: 18,
-    shadowColor: Colors.charcoal,
-    shadowOffset: { width: 3, height: 3 },
-    shadowOpacity: 1,
-    shadowRadius: 0,
-    elevation: 3,
+    padding: 16,
+    borderWidth: 1,
+    borderColor: "rgba(0,0,0,0.06)",
   },
   savingsIcon: {
-    width: 40,
-    height: 40,
+    width: 38,
+    height: 38,
     borderRadius: 12,
     backgroundColor: Colors.lime,
-    borderWidth: 2,
-    borderColor: Colors.charcoal,
     alignItems: "center",
     justifyContent: "center",
   },
-  savingsText: { flex: 1, gap: 4 },
-  savingsTitle: {
-    fontSize: 15,
-    fontFamily: "Inter_700Bold",
-    color: Colors.charcoal,
-  },
-  savingsDesc: {
-    fontSize: 13,
-    fontFamily: "Inter_400Regular",
-    color: Colors.charcoalMid,
-    lineHeight: 19,
-  },
+  savingsTitle: { fontSize: 14, fontFamily: "Inter_700Bold", color: Colors.charcoal },
+  savingsText: { fontSize: 12, fontFamily: "Inter_400Regular", color: Colors.charcoalMid, lineHeight: 18 },
   footer: {
     position: "absolute",
     bottom: 0,
     left: 0,
     right: 0,
     backgroundColor: Colors.white,
-    paddingTop: 16,
+    paddingTop: 14,
     paddingHorizontal: 18,
-    borderTopWidth: 2,
-    borderTopColor: Colors.charcoal,
     gap: 12,
-    shadowColor: Colors.charcoal,
-    shadowOffset: { width: 0, height: -3 },
-    shadowOpacity: 0.15,
-    shadowRadius: 0,
+    borderTopWidth: 1,
+    borderTopColor: "rgba(0,0,0,0.06)",
   },
-  footerInfo: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 8,
-  },
-  footerLabel: {
-    fontSize: 14,
-    fontFamily: "Inter_500Medium",
-    color: Colors.charcoalMid,
-  },
-  footerTier: {
-    fontSize: 15,
-    fontFamily: "Inter_700Bold",
-    color: Colors.charcoal,
-  },
-  footerPricePill: {
-    backgroundColor: Colors.lime,
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 999,
-    borderWidth: 1.5,
-    borderColor: Colors.charcoal,
-  },
-  footerPrice: {
-    fontSize: 13,
-    fontFamily: "Inter_700Bold",
-    color: Colors.charcoal,
-  },
+  footerSummary: { flexDirection: "row", justifyContent: "space-between", alignItems: "center" },
+  footerLabel: { fontSize: 12, fontFamily: "Inter_500Medium", color: Colors.charcoalMid },
+  footerPriceRow: { flexDirection: "row", alignItems: "center", gap: 8 },
+  footerTier: { fontSize: 15, fontFamily: "Inter_700Bold", color: Colors.charcoal },
+  footerPill: { backgroundColor: Colors.lime, paddingHorizontal: 10, paddingVertical: 4, borderRadius: 999 },
+  footerPrice: { fontSize: 13, fontFamily: "Inter_700Bold", color: Colors.charcoal },
 });

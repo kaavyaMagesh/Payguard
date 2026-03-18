@@ -14,23 +14,26 @@ interface PolicyCardProps {
   current?: boolean;
 }
 
-const tierConfig: Record<PolicyTier, { label: string; bg: string; textColor: string; features: string[] }> = {
+const tierConfig: Record<PolicyTier, { label: string; bg: string; textColor: string; iconColor: string; features: string[] }> = {
   basic: {
     label: "Basic",
-    bg: Colors.mint,
+    bg: Colors.pastel.green,
     textColor: Colors.charcoal,
+    iconColor: "#007A45",
     features: ["₹1,000 coverage", "3 triggers", "Weekly auto-renew"],
   },
   standard: {
     label: "Standard",
     bg: Colors.lime,
     textColor: Colors.charcoal,
+    iconColor: Colors.charcoal,
     features: ["₹2,500 coverage", "5 triggers", "Weekly auto-renew", "Pre-emptive alerts"],
   },
   premium: {
     label: "Premium",
     bg: Colors.charcoal,
-    textColor: Colors.lime,
+    textColor: Colors.white,
+    iconColor: Colors.lime,
     features: ["₹5,000 coverage", "5 triggers + extras", "Streak discounts", "Micro top-ups", "Priority payout"],
   },
 };
@@ -52,7 +55,7 @@ export function PolicyCard({ tier, weeklyPremium, coverageAmount, selected = fal
         selected && styles.cardSelected,
       ]}
       onPress={handlePress}
-      activeOpacity={0.88}
+      activeOpacity={0.9}
     >
       {current && (
         <View style={[styles.currentBadge, { backgroundColor: isPremium ? Colors.lime : Colors.charcoal }]}>
@@ -61,36 +64,36 @@ export function PolicyCard({ tier, weeklyPremium, coverageAmount, selected = fal
       )}
 
       <View style={styles.header}>
-        <View style={[styles.tierTag, { backgroundColor: isPremium ? Colors.lime : Colors.charcoal }]}>
-          <Text style={[styles.tierName, { color: isPremium ? Colors.charcoal : Colors.lime }]}>{config.label}</Text>
+        <View style={[styles.tierPill, { backgroundColor: isPremium ? Colors.lime : "rgba(0,0,0,0.09)" }]}>
+          <Text style={[styles.tierLabel, { color: isPremium ? Colors.charcoal : config.textColor }]}>{config.label}</Text>
         </View>
         <View style={styles.priceRow}>
           <Text style={[styles.rupee, { color: config.textColor }]}>₹</Text>
           <Text style={[styles.price, { color: config.textColor }]}>{weeklyPremium}</Text>
-          <Text style={[styles.period, { color: isPremium ? "rgba(200,255,0,0.6)" : Colors.charcoalMid }]}>/wk</Text>
+          <Text style={[styles.period, { color: isPremium ? "rgba(255,255,255,0.45)" : "rgba(0,0,0,0.4)" }]}>/week</Text>
         </View>
-        <Text style={[styles.coverage, { color: isPremium ? "rgba(200,255,0,0.7)" : Colors.charcoalMid }]}>
+        <Text style={[styles.coverage, { color: isPremium ? "rgba(255,255,255,0.5)" : "rgba(0,0,0,0.4)" }]}>
           Up to ₹{coverageAmount.toLocaleString("en-IN")} covered
         </Text>
       </View>
 
-      <View style={[styles.divider, { backgroundColor: isPremium ? "rgba(200,255,0,0.2)" : "rgba(0,0,0,0.1)" }]} />
+      <View style={[styles.divider, { backgroundColor: isPremium ? "rgba(255,255,255,0.1)" : "rgba(0,0,0,0.08)" }]} />
 
       <View style={styles.features}>
         {config.features.map((f, i) => (
           <View key={i} style={styles.featureRow}>
-            <View style={[styles.check, { backgroundColor: isPremium ? Colors.lime : Colors.charcoal }]}>
-              <Ionicons name="checkmark" size={10} color={isPremium ? Colors.charcoal : Colors.lime} />
+            <View style={[styles.check, { backgroundColor: config.iconColor + "22" }]}>
+              <Ionicons name="checkmark" size={10} color={config.iconColor} />
             </View>
-            <Text style={[styles.featureText, { color: config.textColor }]}>{f}</Text>
+            <Text style={[styles.featureText, { color: config.textColor, opacity: isPremium ? 0.8 : 1 }]}>{f}</Text>
           </View>
         ))}
       </View>
 
       {selected && (
-        <View style={[styles.selectedPill, { backgroundColor: isPremium ? Colors.lime : Colors.charcoal }]}>
-          <Text style={[styles.selectedText, { color: isPremium ? Colors.charcoal : Colors.lime }]}>Selected</Text>
-          <Ionicons name="checkmark-circle" size={14} color={isPremium ? Colors.charcoal : Colors.lime} />
+        <View style={[styles.selectedBanner, { backgroundColor: isPremium ? Colors.lime : Colors.charcoal }]}>
+          <Text style={[styles.selectedText, { color: isPremium ? Colors.charcoal : Colors.lime }]}>Selected Plan</Text>
+          <Ionicons name="checkmark-circle" size={15} color={isPremium ? Colors.charcoal : Colors.lime} />
         </View>
       )}
     </TouchableOpacity>
@@ -99,105 +102,57 @@ export function PolicyCard({ tier, weeklyPremium, coverageAmount, selected = fal
 
 const styles = StyleSheet.create({
   card: {
-    borderRadius: 28,
+    borderRadius: 32,
     overflow: "hidden",
-    borderWidth: 2,
-    borderColor: Colors.charcoal,
-    shadowColor: Colors.charcoal,
-    shadowOffset: { width: 4, height: 4 },
-    shadowOpacity: 1,
-    shadowRadius: 0,
+    borderWidth: 1,
+    borderColor: "rgba(0,0,0,0.06)",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.08,
+    shadowRadius: 16,
     elevation: 4,
   },
   cardSelected: {
-    shadowOffset: { width: 6, height: 6 },
+    shadowOpacity: 0.14,
+    shadowRadius: 24,
+    elevation: 6,
   },
   currentBadge: {
     position: "absolute",
-    top: 14,
-    right: 14,
+    top: 16,
+    right: 16,
     paddingHorizontal: 10,
     paddingVertical: 4,
     borderRadius: 999,
-    borderWidth: 1.5,
-    borderColor: Colors.charcoal,
     zIndex: 10,
   },
-  currentLabel: {
-    fontSize: 9,
-    fontFamily: "Inter_700Bold",
-    letterSpacing: 1,
-  },
-  header: {
-    padding: 20,
-    gap: 4,
-  },
-  tierTag: {
+  currentLabel: { fontSize: 9, fontFamily: "Inter_700Bold", letterSpacing: 1 },
+  header: { padding: 20, gap: 4 },
+  tierPill: {
     alignSelf: "flex-start",
     paddingHorizontal: 12,
     paddingVertical: 4,
     borderRadius: 999,
-    borderWidth: 1.5,
-    borderColor: Colors.charcoal,
-    marginBottom: 8,
+    marginBottom: 10,
   },
-  tierName: {
-    fontSize: 11,
-    fontFamily: "Inter_700Bold",
-    letterSpacing: 1.2,
-    textTransform: "uppercase",
-  },
-  priceRow: {
-    flexDirection: "row",
-    alignItems: "baseline",
-    gap: 1,
-  },
-  rupee: {
-    fontSize: 20,
-    fontFamily: "Inter_700Bold",
-  },
-  price: {
-    fontSize: 42,
-    fontFamily: "Inter_700Bold",
-    lineHeight: 46,
-  },
-  period: {
-    fontSize: 14,
-    fontFamily: "Inter_500Medium",
-    marginLeft: 2,
-  },
-  coverage: {
-    fontSize: 12,
-    fontFamily: "Inter_500Medium",
-    marginTop: 2,
-  },
-  divider: {
-    height: 1.5,
-    marginHorizontal: 20,
-  },
-  features: {
-    padding: 20,
-    gap: 10,
-  },
-  featureRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 10,
-  },
+  tierLabel: { fontSize: 11, fontFamily: "Inter_700Bold", letterSpacing: 0.8, textTransform: "uppercase" },
+  priceRow: { flexDirection: "row", alignItems: "baseline", gap: 1 },
+  rupee: { fontSize: 18, fontFamily: "Inter_700Bold" },
+  price: { fontSize: 44, fontFamily: "Inter_700Bold", letterSpacing: -1, lineHeight: 48 },
+  period: { fontSize: 14, fontFamily: "Inter_500Medium", marginLeft: 2 },
+  coverage: { fontSize: 12, fontFamily: "Inter_500Medium", marginTop: 2 },
+  divider: { height: 1, marginHorizontal: 20 },
+  features: { padding: 20, gap: 10 },
+  featureRow: { flexDirection: "row", alignItems: "center", gap: 10 },
   check: {
     width: 18,
     height: 18,
-    borderRadius: 5,
-    borderWidth: 1.5,
-    borderColor: Colors.charcoal,
+    borderRadius: 6,
     alignItems: "center",
     justifyContent: "center",
   },
-  featureText: {
-    fontSize: 14,
-    fontFamily: "Inter_500Medium",
-  },
-  selectedPill: {
+  featureText: { fontSize: 14, fontFamily: "Inter_500Medium" },
+  selectedBanner: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
@@ -206,11 +161,6 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     paddingVertical: 10,
     borderRadius: 999,
-    borderWidth: 1.5,
-    borderColor: Colors.charcoal,
   },
-  selectedText: {
-    fontSize: 13,
-    fontFamily: "Inter_700Bold",
-  },
+  selectedText: { fontSize: 13, fontFamily: "Inter_700Bold" },
 });

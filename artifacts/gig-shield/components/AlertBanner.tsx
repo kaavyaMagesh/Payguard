@@ -12,31 +12,28 @@ interface AlertBannerProps {
 export function AlertBanner({ message, type, subtitle }: AlertBannerProps) {
   const config = {
     warning: {
-      bg: "#FFF3CD",
-      border: Colors.charcoal,
-      icon: "warning",
-      iconColor: "#FF9500",
-      dot: "#FF9500",
+      bg: Colors.pastel.yellow,
+      icon: "warning-outline",
+      iconColor: "#C07000",
+      border: "rgba(192,112,0,0.15)",
     },
     success: {
-      bg: Colors.lime,
-      border: Colors.charcoal,
-      icon: "checkmark-circle",
-      iconColor: Colors.charcoal,
-      dot: Colors.charcoal,
+      bg: Colors.pastel.green,
+      icon: "checkmark-circle-outline",
+      iconColor: "#007A45",
+      border: "rgba(0,122,69,0.15)",
     },
     info: {
-      bg: Colors.mint,
-      border: Colors.charcoal,
-      icon: "information-circle",
-      iconColor: Colors.charcoal,
-      dot: Colors.charcoal,
+      bg: Colors.pastel.blue,
+      icon: "information-circle-outline",
+      iconColor: "#005BAA",
+      border: "rgba(0,91,170,0.15)",
     },
   }[type];
 
   return (
     <View style={[styles.container, { backgroundColor: config.bg, borderColor: config.border }]}>
-      <Ionicons name={config.icon as any} size={20} color={config.iconColor} />
+      <Ionicons name={config.icon as any} size={18} color={config.iconColor} />
       <View style={styles.text}>
         <Text style={styles.message}>{message}</Text>
         {subtitle && <Text style={styles.subtitle}>{subtitle}</Text>}
@@ -52,18 +49,14 @@ const styles = StyleSheet.create({
     gap: 10,
     padding: 14,
     borderRadius: 20,
-    borderWidth: 2,
-    shadowColor: Colors.charcoal,
-    shadowOffset: { width: 3, height: 3 },
-    shadowOpacity: 1,
-    shadowRadius: 0,
-    elevation: 3,
+    borderWidth: 1,
   },
   text: { flex: 1, gap: 2 },
   message: {
     fontSize: 13,
     fontFamily: "Inter_700Bold",
     color: Colors.charcoal,
+    letterSpacing: -0.2,
   },
   subtitle: {
     fontSize: 12,

@@ -2,10 +2,25 @@ import { Ionicons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
 import React from "react";
 import { Platform, StyleSheet, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Colors } from "@/constants/colors";
 
+function TabIcon({ name, focused }: { name: string; focused: boolean }) {
+  return (
+    <View style={[styles.iconWrap, focused && styles.iconActive]}>
+      <Ionicons
+        name={name as any}
+        size={20}
+        color={focused ? Colors.charcoal : Colors.charcoalMid}
+      />
+    </View>
+  );
+}
+
 export default function TabLayout() {
+  const insets = useSafeAreaInsets();
   const isWeb = Platform.OS === "web";
+  const bottomPad = isWeb ? 24 : insets.bottom + 8;
 
   return (
     <Tabs
@@ -13,42 +28,35 @@ export default function TabLayout() {
         headerShown: false,
         tabBarActiveTintColor: Colors.charcoal,
         tabBarInactiveTintColor: Colors.charcoalMid,
-        tabBarActiveBackgroundColor: "transparent",
-        tabBarLabelStyle: {
-          fontFamily: "Inter_700Bold",
-          fontSize: 11,
-          letterSpacing: 0.2,
-        },
+        tabBarShowLabel: false,
         tabBarStyle: {
           position: "absolute",
-          backgroundColor: Colors.lime,
-          borderTopWidth: 2,
-          borderTopColor: Colors.charcoal,
+          left: 40,
+          right: 40,
+          bottom: bottomPad,
+          height: 64,
+          borderRadius: 999,
+          backgroundColor: Colors.white,
+          borderTopWidth: 0,
           elevation: 0,
-          height: isWeb ? 84 : 72,
-          paddingBottom: isWeb ? 16 : 8,
-          paddingTop: 8,
-          shadowColor: Colors.charcoal,
-          shadowOffset: { width: 0, height: -4 },
-          shadowOpacity: 1,
-          shadowRadius: 0,
+          shadowColor: "#000",
+          shadowOffset: { width: 0, height: 8 },
+          shadowOpacity: 0.12,
+          shadowRadius: 24,
+          borderWidth: 1,
+          borderColor: "rgba(0,0,0,0.06)",
+          paddingBottom: 0,
+          paddingTop: 0,
         },
-        tabBarBackground: () => (
-          <View style={[StyleSheet.absoluteFill, { backgroundColor: Colors.lime }]} />
-        ),
-        tabBarItemStyle: {
-          borderRadius: 0,
-        },
+        tabBarBackground: () => null,
       }}
     >
       <Tabs.Screen
         name="index"
         options={{
           title: "Home",
-          tabBarIcon: ({ color, focused }) => (
-            <View style={focused ? styles.activeIcon : styles.icon}>
-              <Ionicons name={focused ? "home" : "home-outline"} size={22} color={focused ? Colors.charcoal : Colors.charcoalMid} />
-            </View>
+          tabBarIcon: ({ focused }) => (
+            <TabIcon name={focused ? "home" : "home-outline"} focused={focused} />
           ),
         }}
       />
@@ -56,9 +64,18 @@ export default function TabLayout() {
         name="triggers"
         options={{
           title: "Live",
-          tabBarIcon: ({ color, focused }) => (
-            <View style={focused ? styles.activeIcon : styles.icon}>
-              <Ionicons name={focused ? "pulse" : "pulse-outline"} size={22} color={focused ? Colors.charcoal : Colors.charcoalMid} />
+          tabBarIcon: ({ focused }) => (
+            <TabIcon name={focused ? "pulse" : "pulse-outline"} focused={focused} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="chat"
+        options={{
+          title: "AI Chat",
+          tabBarIcon: ({ focused }) => (
+            <View style={styles.chatTabBtn}>
+              <Ionicons name="sparkles" size={20} color={Colors.charcoal} />
             </View>
           ),
         }}
@@ -67,10 +84,8 @@ export default function TabLayout() {
         name="payouts"
         options={{
           title: "Payouts",
-          tabBarIcon: ({ color, focused }) => (
-            <View style={focused ? styles.activeIcon : styles.icon}>
-              <Ionicons name={focused ? "cash" : "cash-outline"} size={22} color={focused ? Colors.charcoal : Colors.charcoalMid} />
-            </View>
+          tabBarIcon: ({ focused }) => (
+            <TabIcon name={focused ? "cash" : "cash-outline"} focused={focused} />
           ),
         }}
       />
@@ -78,10 +93,8 @@ export default function TabLayout() {
         name="profile"
         options={{
           title: "Profile",
-          tabBarIcon: ({ color, focused }) => (
-            <View style={focused ? styles.activeIcon : styles.icon}>
-              <Ionicons name={focused ? "person" : "person-outline"} size={22} color={focused ? Colors.charcoal : Colors.charcoalMid} />
-            </View>
+          tabBarIcon: ({ focused }) => (
+            <TabIcon name={focused ? "person" : "person-outline"} focused={focused} />
           ),
         }}
       />
@@ -90,20 +103,29 @@ export default function TabLayout() {
 }
 
 const styles = StyleSheet.create({
-  icon: {
-    width: 36,
-    height: 28,
+  iconWrap: {
+    width: 38,
+    height: 38,
+    borderRadius: 999,
     alignItems: "center",
     justifyContent: "center",
   },
-  activeIcon: {
-    width: 36,
-    height: 28,
+  iconActive: {
+    backgroundColor: Colors.lime,
+  },
+  chatTabBtn: {
+    width: 46,
+    height: 46,
+    borderRadius: 999,
+    backgroundColor: Colors.lime,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: Colors.white,
-    borderRadius: 999,
     borderWidth: 1.5,
     borderColor: Colors.charcoal,
+    shadowColor: Colors.charcoal,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    elevation: 4,
   },
 });

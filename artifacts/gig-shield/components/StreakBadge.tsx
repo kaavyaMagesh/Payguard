@@ -1,6 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
-import React, { useEffect, useRef } from "react";
-import { Animated, StyleSheet, Text, View } from "react-native";
+import React from "react";
+import { StyleSheet, Text, View } from "react-native";
 import { Colors } from "@/constants/colors";
 
 interface StreakBadgeProps {
@@ -8,82 +8,68 @@ interface StreakBadgeProps {
 }
 
 export function StreakBadge({ weeks }: StreakBadgeProps) {
-  const scaleAnim = useRef(new Animated.Value(0.85)).current;
-
-  useEffect(() => {
-    Animated.spring(scaleAnim, {
-      toValue: 1,
-      useNativeDriver: true,
-      tension: 120,
-      friction: 8,
-    }).start();
-  }, []);
-
   return (
-    <Animated.View style={[styles.container, { transform: [{ scale: scaleAnim }] }]}>
+    <View style={styles.container}>
       <View style={styles.left}>
         <View style={styles.iconBox}>
-          <Ionicons name="flame" size={22} color={Colors.charcoal} />
+          <Ionicons name="flame" size={20} color="#C07000" />
         </View>
         <View>
           <Text style={styles.label}>Current Streak</Text>
-          <Text style={styles.reward}>2 more weeks for discount!</Text>
+          <Text style={styles.reward}>2 more weeks for a discount!</Text>
         </View>
       </View>
       <View style={styles.weeksBadge}>
         <Text style={styles.weeks}>{weeks}</Text>
         <Text style={styles.weeksLabel}>WKS</Text>
       </View>
-    </Animated.View>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: Colors.lime,
-    borderRadius: 24,
-    borderWidth: 2,
-    borderColor: Colors.charcoal,
+    backgroundColor: Colors.pastel.yellow,
+    borderRadius: 32,
+    borderWidth: 1,
+    borderColor: "rgba(0,0,0,0.06)",
     padding: 16,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    shadowColor: Colors.charcoal,
-    shadowOffset: { width: 4, height: 4 },
-    shadowOpacity: 1,
-    shadowRadius: 0,
-    elevation: 4,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.06,
+    shadowRadius: 10,
+    elevation: 3,
   },
-  left: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 12,
-  },
+  left: { flexDirection: "row", alignItems: "center", gap: 12 },
   iconBox: {
     width: 44,
     height: 44,
-    borderRadius: 12,
+    borderRadius: 14,
     backgroundColor: Colors.white,
-    borderWidth: 2,
-    borderColor: Colors.charcoal,
+    borderWidth: 1,
+    borderColor: "rgba(0,0,0,0.07)",
     alignItems: "center",
     justifyContent: "center",
   },
   label: {
-    fontSize: 15,
+    fontSize: 14,
     fontFamily: "Inter_700Bold",
     color: Colors.charcoal,
+    letterSpacing: -0.2,
   },
   reward: {
     fontSize: 11,
-    fontFamily: "Inter_500Medium",
+    fontFamily: "Inter_400Regular",
     color: Colors.charcoalMid,
     marginTop: 2,
   },
   weeksBadge: {
     backgroundColor: Colors.charcoal,
-    borderRadius: 14,
-    paddingHorizontal: 14,
+    borderRadius: 20,
+    paddingHorizontal: 16,
     paddingVertical: 8,
     alignItems: "center",
   },
@@ -91,11 +77,12 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontFamily: "Inter_700Bold",
     color: Colors.lime,
+    letterSpacing: -0.5,
   },
   weeksLabel: {
     fontSize: 9,
     fontFamily: "Inter_700Bold",
-    color: Colors.lime,
+    color: "rgba(212,255,0,0.55)",
     letterSpacing: 1,
   },
 });
