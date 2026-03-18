@@ -1,4 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
+import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import React from "react";
 import {
@@ -31,7 +32,12 @@ export default function HomeScreen() {
   const tierLabel = policy.tier.charAt(0).toUpperCase() + policy.tier.slice(1);
 
   return (
-    <View style={styles.container}>
+    <LinearGradient
+      colors={[Colors.mint, Colors.white]}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 0, y: 0.55 }}
+      style={styles.container}
+    >
       <ScrollView
         showsVerticalScrollIndicator={false}
         refreshControl={
@@ -197,12 +203,12 @@ export default function HomeScreen() {
           trailingIcon="sparkles"
         />
       </ScrollView>
-    </View>
+    </LinearGradient>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#FFFFFF" },
+  container: { flex: 1 },
   scroll: {
     flexGrow: 1,
     paddingHorizontal: 18,

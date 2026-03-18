@@ -1,4 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
+import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
 import { Platform, ScrollView, StyleSheet, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -18,7 +19,12 @@ export default function PayoutsScreen() {
   const roi = totalPremiums > 0 ? Math.round((totalPaidOut / totalPremiums) * 100) : 0;
 
   return (
-    <View style={styles.container}>
+    <LinearGradient
+      colors={[Colors.mint, Colors.white]}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 0, y: 0.55 }}
+      style={styles.container}
+    >
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={[styles.scroll, { paddingTop: topInset + 8, paddingBottom: bottomInset + 120 }]}
@@ -94,12 +100,12 @@ export default function PayoutsScreen() {
           )}
         </View>
       </ScrollView>
-    </View>
+    </LinearGradient>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#FFFFFF" },
+  container: { flex: 1 },
   scroll: { flexGrow: 1, paddingHorizontal: 18, gap: 16 },
   title: { fontSize: 28, fontFamily: "Inter_700Bold", color: Colors.charcoal, letterSpacing: -0.5 },
   subtitle: { fontSize: 13, fontFamily: "Inter_500Medium", color: Colors.charcoalMid, marginTop: -10 },

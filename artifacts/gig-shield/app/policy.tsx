@@ -1,4 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
+import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import React, { useState } from "react";
 import { Platform, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
@@ -35,7 +36,12 @@ export default function PolicyScreen() {
   const selected = tiers.find((t) => t.tier === selectedTier)!;
 
   return (
-    <View style={styles.container}>
+    <LinearGradient
+      colors={[Colors.mint, Colors.white]}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 0, y: 0.55 }}
+      style={styles.container}
+    >
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={[styles.scroll, { paddingTop: topInset + 12, paddingBottom: bottomInset + 150 }]}
@@ -119,12 +125,12 @@ export default function PolicyScreen() {
           trailingIcon="flash"
         />
       </View>
-    </View>
+    </LinearGradient>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#FFFFFF" },
+  container: { flex: 1 },
   scroll: { flexGrow: 1, paddingHorizontal: 18, gap: 16 },
   header: { flexDirection: "row", alignItems: "flex-start", gap: 12 },
   backBtn: {
