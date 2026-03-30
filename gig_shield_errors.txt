@@ -1,0 +1,11 @@
+﻿
+> @workspace/gig-shield@0.0.0 typecheck C:\Users\mages\Desktop\parashield\Mobile-Interface-Builder\artifacts\gig-shield
+> tsc -p tsconfig.json --noEmit
+
+components/KeyboardAwareScrollViewCompat.tsx(26,7): error TS2322: Type 'ReactNode' is not assignable to type '((string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<...>) & (string | ... 6 more ... | Promise<...>)) | null | undefined'.
+  Type 'ReactElement<unknown, string | JSXElementConstructor<any>>' is not assignable to type '((string | number | bigint | boolean | ReactElement<unknown, string | JSXElementConstructor<any>> | Iterable<ReactNode> | ReactPortal | Promise<...>) & (string | ... 6 more ... | Promise<...>)) | null | undefined'.
+    Type 'ReactElement<unknown, string | JSXElementConstructor<any>>' is not assignable to type 'Promise<AwaitedReactNode> & ReactPortal'.
+      Type 'ReactElement<unknown, string | JSXElementConstructor<any>>' is missing the following properties from type 'Promise<AwaitedReactNode>': then, catch, finally, [Symbol.toStringTag]
+C:\Users\mages\Desktop\parashield\Mobile-Interface-Builder\artifacts\gig-shield:
+ΓÇëERR_PNPM_RECURSIVE_RUN_FIRST_FAILΓÇë @workspace/gig-shield@0.0.0 typecheck: `tsc -p tsconfig.json --noEmit`
+Exit status 2

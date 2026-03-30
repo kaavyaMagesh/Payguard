@@ -55,12 +55,12 @@ export function Card({
 
   if (onPress) {
     return (
-      <TouchableOpacity style={baseStyle} onPress={onPress} activeOpacity={0.88}>
+      <TouchableOpacity style={baseStyle as any} onPress={onPress} activeOpacity={0.88}>
         {children}
       </TouchableOpacity>
     );
   }
-  return <View style={baseStyle}>{children}</View>;
+  return <View style={baseStyle as any}>{children}</View>;
 }
 
 const styles = StyleSheet.create({

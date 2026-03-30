@@ -36,7 +36,11 @@ export function ErrorFallback({ error, resetError }: ErrorFallbackProps) {
 
   const handleRestart = async () => {
     try {
-      await reloadAppAsync();
+      if (Platform.OS !== "web") {
+        await reloadAppAsync();
+      } else {
+        window.location.reload();
+      }
     } catch (restartError) {
       console.error("Failed to restart app:", restartError);
       resetError();
@@ -73,7 +77,7 @@ export function ErrorFallback({ error, resetError }: ErrorFallbackProps) {
             },
           ]}
         >
-          <Feather name="alert-circle" size={20} color={theme.text} />
+          <Feather name="alert-circle" size={20} color={theme.text as any} />
         </Pressable>
       ) : null}
 
@@ -139,7 +143,7 @@ export function ErrorFallback({ error, resetError }: ErrorFallbackProps) {
                     { opacity: pressed ? 0.6 : 1 },
                   ]}
                 >
-                  <Feather name="x" size={24} color={theme.text} />
+                  <Feather name="x" size={24} color={theme.text as any} />
                 </Pressable>
               </View>
 

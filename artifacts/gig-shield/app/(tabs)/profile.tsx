@@ -1,280 +1,146 @@
 import { Ionicons } from "@expo/vector-icons";
-import * as Haptics from "expo-haptics";
-import { LinearGradient } from "expo-linear-gradient";
-import { router } from "expo-router";
 import React from "react";
-import { Platform, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import {
+  Platform,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Card } from "@/components/ui/Card";
 import { Colors } from "@/constants/colors";
 import { useApp } from "@/context/AppContext";
 
-const PLATFORM_LABELS: Record<string, string> = {
-  swiggy: "Swiggy",
-  zomato: "Zomato",
-  zepto: "Zepto",
-  blinkit: "Blinkit",
-  dunzo: "Dunzo",
-};
-
-
 export default function ProfileScreen() {
-  const { worker, policy, totalPaidOut, payouts } = useApp();
+  const { worker, totalPremiums } = useApp();
   const insets = useSafeAreaInsets();
 
-  const topInset = Platform.OS === "web" ? 67 : insets.top;
-  const bottomInset = Platform.OS === "web" ? 34 : insets.bottom;
-
-  const haptic = () => {
-    if (Platform.OS !== "web") Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-  };
+  const topPad = Platform.OS === "web" ? 64 : insets.top;
 
   if (!worker) return null;
 
-  const joinedDate = new Date(worker.joinedAt).toLocaleDateString("en-IN", { month: "long", year: "numeric" });
-  const menuItems = [
-    { icon: "notifications-outline", label: "Notifications & Alerts", sub: "Rain, AQI, payout alerts" },
-    { icon: "card-outline", label: "UPI & Payments", sub: worker.upiId },
-    { icon: "shield-checkmark-outline", label: "KYC Verification", sub: "Aadhaar + Selfie verified" },
-    { icon: "people-outline", label: "Fleet / Group Plans", sub: "Save up to 20% as a group" },
-    { icon: "help-circle-outline", label: "Help & Support", sub: "Chat with us 24/7" },
-  ];
-
   return (
-    <LinearGradient
-      colors={[Colors.mint, Colors.white]}
-      start={{ x: 0, y: 0 }}
-      end={{ x: 0, y: 0.55 }}
-      style={styles.container}
-    >
+    <View style={styles.container}>
       <ScrollView
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={[styles.scroll, { paddingTop: topInset + 8, paddingBottom: bottomInset + 120 }]}
+        contentContainerStyle={[
+          styles.content,
+          { paddingTop: topPad + 16, paddingBottom: 130 },
+        ]}
       >
-        {/* Profile Card */}
-        <Card variant="dark" padding={22} radius={32} noBorder style={styles.profileCard}>
+        <View style={styles.header}>
+          <Text style={styles.title}>Account</Text>
+        </View>
+
+        <Card padding={20} radius={32} style={styles.profileCard}>
           <View style={styles.profileTop}>
-            <View style={styles.avatarBox}>
+            <View style={styles.avatar}>
               <Text style={styles.avatarText}>{worker.avatarInitials}</Text>
             </View>
-            <View style={styles.profileInfo}>
-              <Text style={styles.workerName}>{worker.name}</Text>
-              <View style={styles.platformRow}>
-                <View style={styles.platformPill}>
-                  <Text style={styles.platformText}>{PLATFORM_LABELS[worker.platform]}</Text>
-                </View>
-                <Text style={styles.joinedText}>Since {joinedDate}</Text>
-              </View>
-              <Text style={styles.zoneText}>{worker.zone} · {worker.pincode}</Text>
+            <View>
+              <Text style={styles.name}>{worker.name}</Text>
+              <Text style={styles.phone}>{worker.phone}</Text>
             </View>
           </View>
 
-          <View style={styles.verifyRow}>
-            {[
-              { ok: worker.aadhaarVerified, label: "Aadhaar" },
-              { ok: worker.selfieVerified, label: "Selfie" },
-            ].map((v) => (
-              <View key={v.label} style={[styles.verifyPill, { backgroundColor: v.ok ? Colors.lime : Colors.danger }]}>
-                <Ionicons name={v.ok ? "checkmark" : "close"} size={10} color={v.ok ? Colors.charcoal : "#fff"} />
-                <Text style={[styles.verifyText, { color: v.ok ? Colors.charcoal : "#fff" }]}>{v.label}</Text>
-              </View>
-            ))}
-            <View style={styles.upiPill}>
-              <Ionicons name="card-outline" size={11} color="rgba(255,255,255,0.6)" />
-              <Text style={styles.upiText}>{worker.upiId}</Text>
+          <View style={styles.statsRow}>
+            <View style={styles.stat}>
+              <Text style={styles.statVal}>₹{totalPremiums}</Text>
+              <Text style={styles.statLab}>Premiums</Text>
+            </View>
+            <View style={styles.statDiv} />
+            <View style={styles.stat}>
+              <Text style={styles.statVal}>{worker.platform.toUpperCase()}</Text>
+              <Text style={styles.statLab}>Platform</Text>
+            </View>
+            <View style={styles.statDiv} />
+            <View style={styles.stat}>
+              <Text style={styles.statVal}>{worker.streakWeeks}</Text>
+              <Text style={styles.statLab}>Weeks</Text>
             </View>
           </View>
         </Card>
 
-        {/* Stats Bento */}
-        <View style={styles.bentoGrid}>
-          <Card variant="yellow" padding={18} radius={28} noBorder style={styles.bentoCard}>
-            <View style={styles.bentoIcon}>
-              <Ionicons name="cash-outline" size={16} color="#A07800" />
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Verification</Text>
+          <Card padding={0} radius={24} noBorder>
+            <View style={styles.row}>
+              <Ionicons name="card-outline" size={20} color={Colors.success} />
+              <Text style={styles.rowLabel}>Aadhaar Verified</Text>
+              <Ionicons name="checkmark-circle" size={18} color={Colors.success} />
             </View>
-            <Text style={styles.bentoLabel}>TOTAL OUT</Text>
-            <Text style={styles.bentoValue}>₹{totalPaidOut}</Text>
-            <Text style={styles.bentoSub}>{payouts.length} claims</Text>
-          </Card>
-          <Card variant="blue" padding={18} radius={28} noBorder style={styles.bentoCard}>
-            <View style={styles.bentoIcon}>
-              <Ionicons name="shield-outline" size={16} color="#005BAA" />
+            <View style={styles.line} />
+            <View style={styles.row}>
+              <Ionicons name="camera-outline" size={20} color={Colors.success} />
+              <Text style={styles.rowLabel}>Selfie Verified</Text>
+              <Ionicons name="checkmark-circle" size={18} color={Colors.success} />
             </View>
-            <Text style={styles.bentoLabel}>RISK SCORE</Text>
-            <Text style={styles.bentoValue}>{worker.riskScore}</Text>
-            <Text style={styles.bentoSub}>Low risk</Text>
-          </Card>
-          <Card variant="green" padding={18} radius={28} noBorder style={styles.bentoCard}>
-            <View style={styles.bentoIcon}>
-              <Ionicons name="flame-outline" size={16} color="#007A45" />
-            </View>
-            <Text style={styles.bentoLabel}>STREAK</Text>
-            <Text style={styles.bentoValue}>{worker.streakWeeks}wk</Text>
-            <Text style={styles.bentoSub}>Keep going</Text>
           </Card>
         </View>
 
-        {/* Plan Card */}
-        {policy && (
-          <Card padding={18} radius={28} noBorder onPress={() => { haptic(); router.push("/policy"); }}>
-            <View style={styles.planRow}>
-              <View>
-                <Text style={styles.planLabel}>CURRENT PLAN</Text>
-                <Text style={styles.planTier}>{policy.tier.charAt(0).toUpperCase() + policy.tier.slice(1)} — ₹{policy.weeklyPremium}/wk</Text>
-                <Text style={styles.planExpiry}>
-                  Renews {new Date(policy.endDate).toLocaleDateString("en-IN", { day: "numeric", month: "short" })}
-                </Text>
-              </View>
-              <Pressable
-                onPress={() => { haptic(); router.push("/policy"); }}
-                style={styles.changePill}
-              >
-                <Text style={styles.changePillText}>Change</Text>
-                <View style={styles.changeIcon}>
-                  <Ionicons name="arrow-forward" size={12} color={Colors.charcoal} />
-                </View>
-              </Pressable>
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Preferences</Text>
+          <Card padding={0} radius={24} noBorder>
+            <View style={styles.row}>
+              <Ionicons name="notifications-outline" size={20} color={Colors.charcoal} />
+              <Text style={styles.rowLabel}>Push Notifications</Text>
+              <Ionicons name="chevron-forward" size={16} color={Colors.textMuted} />
+            </View>
+            <View style={styles.line} />
+            <View style={styles.row}>
+              <Ionicons name="wallet-outline" size={20} color={Colors.charcoal} />
+              <Text style={styles.rowLabel}>UPI Settings</Text>
+              <Text style={styles.upiText}>{worker.upiId}</Text>
             </View>
           </Card>
-        )}
-
-        {/* Settings Menu */}
-        <Card padding={0} radius={28} noBorder style={styles.menuCard}>
-          {menuItems.map((item, i) => (
-            <Pressable
-              key={item.label}
-              onPress={haptic}
-              style={({ pressed }) => [
-                styles.menuItem,
-                i < menuItems.length - 1 && styles.menuItemBorder,
-                { opacity: pressed ? 0.7 : 1 },
-              ]}
-            >
-              <View style={styles.menuIconBox}>
-                <Ionicons name={item.icon as any} size={17} color={Colors.charcoalMid} />
-              </View>
-              <View style={styles.menuContent}>
-                <Text style={styles.menuLabel}>{item.label}</Text>
-                <Text style={styles.menuSub} numberOfLines={1}>{item.sub}</Text>
-              </View>
-              <Ionicons name="chevron-forward" size={14} color={Colors.charcoalMid} />
-            </Pressable>
-          ))}
-        </Card>
-
-        {/* Sign Out */}
-        <Pressable style={styles.signOut}>
-          <Ionicons name="log-out-outline" size={16} color={Colors.danger} />
-          <Text style={styles.signOutText}>Sign Out</Text>
-        </Pressable>
+        </View>
       </ScrollView>
-    </LinearGradient>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1 },
-  scroll: { flexGrow: 1, paddingHorizontal: 18, gap: 16 },
-  profileCard: { gap: 16 },
-  profileTop: { flexDirection: "row", gap: 14, alignItems: "center" },
-  avatarBox: {
-    width: 58,
-    height: 58,
+  container: { flex: 1, backgroundColor: Colors.offWhite },
+  content: { paddingHorizontal: 18, gap: 20 },
+  header: { marginBottom: 4 },
+  title: { fontSize: 30, fontFamily: "Inter_700Bold", color: Colors.charcoal, letterSpacing: -0.6 },
+  profileCard: { gap: 20 },
+  profileTop: { flexDirection: "row", alignItems: "center", gap: 16 },
+  avatar: {
+    width: 64,
+    height: 64,
+    borderRadius: 22,
+    backgroundColor: Colors.lime,
+    alignItems: "center",
+    justifyContent: "center",
+    borderWidth: 1,
+    borderColor: "rgba(0,0,0,0.08)",
+  },
+  avatarText: { fontSize: 24, fontFamily: "Inter_700Bold", color: Colors.charcoal },
+  name: { fontSize: 20, fontFamily: "Inter_700Bold", color: Colors.charcoal },
+  phone: { fontSize: 14, fontFamily: "Inter_500Medium", color: Colors.charcoalMid },
+  statsRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    backgroundColor: "rgba(0,0,0,0.03)",
+    padding: 16,
     borderRadius: 20,
-    backgroundColor: Colors.lime,
-    alignItems: "center",
-    justifyContent: "center",
   },
-  avatarText: { fontSize: 20, fontFamily: "Inter_700Bold", color: Colors.charcoal },
-  profileInfo: { flex: 1, gap: 4 },
-  workerName: { fontSize: 20, fontFamily: "Inter_700Bold", color: Colors.white, letterSpacing: -0.3 },
-  platformRow: { flexDirection: "row", alignItems: "center", gap: 8 },
-  platformPill: {
-    backgroundColor: Colors.lime,
-    paddingHorizontal: 8,
-    paddingVertical: 3,
-    borderRadius: 999,
-  },
-  platformText: { fontSize: 10, fontFamily: "Inter_700Bold", color: Colors.charcoal, letterSpacing: 0.2 },
-  joinedText: { fontSize: 11, fontFamily: "Inter_400Regular", color: "rgba(255,255,255,0.45)" },
-  zoneText: { fontSize: 12, fontFamily: "Inter_400Regular", color: "rgba(255,255,255,0.45)" },
-  verifyRow: { flexDirection: "row", gap: 6, flexWrap: "wrap" },
-  verifyPill: {
+  stat: { flex: 1, alignItems: "center", gap: 2 },
+  statVal: { fontSize: 16, fontFamily: "Inter_700Bold", color: Colors.charcoal },
+  statLab: { fontSize: 11, fontFamily: "Inter_600SemiBold", color: Colors.charcoalMid, textTransform: "uppercase" },
+  statDiv: { width: 1, height: 24, backgroundColor: "rgba(0,0,0,0.07)" },
+  section: { gap: 12 },
+  sectionTitle: { fontSize: 18, fontFamily: "Inter_700Bold", color: Colors.charcoal, marginLeft: 4 },
+  row: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 4,
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 999,
+    padding: 16,
+    gap: 12,
   },
-  verifyText: { fontSize: 10, fontFamily: "Inter_600SemiBold" },
-  upiPill: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 4,
-    backgroundColor: "rgba(255,255,255,0.1)",
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 999,
-  },
-  upiText: { fontSize: 10, fontFamily: "Inter_500Medium", color: "rgba(255,255,255,0.6)" },
-  bentoGrid: { flexDirection: "row", gap: 10 },
-  bentoCard: { flex: 1, gap: 3, position: "relative" },
-  bentoIcon: {
-    width: 28,
-    height: 28,
-    borderRadius: 9,
-    backgroundColor: "rgba(0,0,0,0.06)",
-    alignItems: "center",
-    justifyContent: "center",
-    marginBottom: 6,
-  },
-  bentoLabel: { fontSize: 9, fontFamily: "Inter_700Bold", color: Colors.charcoalMid, letterSpacing: 0.8 },
-  bentoValue: { fontSize: 20, fontFamily: "Inter_700Bold", color: Colors.charcoal, letterSpacing: -0.4 },
-  bentoSub: { fontSize: 10, fontFamily: "Inter_400Regular", color: Colors.charcoalMid },
-  planRow: { flexDirection: "row", justifyContent: "space-between", alignItems: "center" },
-  planLabel: { fontSize: 9, fontFamily: "Inter_700Bold", color: Colors.charcoalMid, letterSpacing: 0.8, marginBottom: 3 },
-  planTier: { fontSize: 16, fontFamily: "Inter_700Bold", color: Colors.charcoal, letterSpacing: -0.2 },
-  planExpiry: { fontSize: 11, fontFamily: "Inter_400Regular", color: Colors.charcoalMid, marginTop: 2 },
-  changePill: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 6,
-    backgroundColor: Colors.charcoal,
-    paddingLeft: 14,
-    paddingRight: 6,
-    paddingVertical: 8,
-    borderRadius: 999,
-  },
-  changePillText: { fontSize: 13, fontFamily: "Inter_700Bold", color: Colors.white },
-  changeIcon: {
-    width: 24,
-    height: 24,
-    borderRadius: 999,
-    backgroundColor: Colors.lime,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  menuCard: { overflow: "hidden" },
-  menuItem: { flexDirection: "row", alignItems: "center", gap: 12, paddingHorizontal: 16, paddingVertical: 14 },
-  menuItemBorder: { borderBottomWidth: 1, borderBottomColor: "rgba(0,0,0,0.06)" },
-  menuIconBox: {
-    width: 36,
-    height: 36,
-    borderRadius: 12,
-    backgroundColor: Colors.surfaceSecondary,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  menuContent: { flex: 1, gap: 1 },
-  menuLabel: { fontSize: 14, fontFamily: "Inter_600SemiBold", color: Colors.charcoal },
-  menuSub: { fontSize: 11, fontFamily: "Inter_400Regular", color: Colors.textMuted },
-  signOut: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: 6,
-    paddingVertical: 12,
-  },
-  signOutText: { fontSize: 14, fontFamily: "Inter_600SemiBold", color: Colors.danger },
+  rowLabel: { flex: 1, fontSize: 15, fontFamily: "Inter_600SemiBold", color: Colors.charcoal },
+  line: { height: 1, backgroundColor: "rgba(0,0,0,0.05)", marginHorizontal: 16 },
+  upiText: { fontSize: 13, fontFamily: "Inter_500Medium", color: Colors.charcoalMid },
 });

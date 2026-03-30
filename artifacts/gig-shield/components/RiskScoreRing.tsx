@@ -23,7 +23,7 @@ export function RiskScoreRing({ score, size = 100 }: RiskScoreRingProps) {
   const color = getColor(score);
 
   return (
-    <View style={[styles.container, { width: size, height: size, borderRadius: size / 2, backgroundColor: color }]}>
+    <View style={[styles.container as any, { width: size, height: size, borderRadius: size / 2, backgroundColor: color }]}>
       <Text style={styles.score}>{score}</Text>
       <Text style={styles.label}>{getLabel(score)}</Text>
     </View>

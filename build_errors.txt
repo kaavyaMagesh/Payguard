@@ -1,0 +1,14 @@
+﻿
+> @workspace/gig-shield@0.0.0 build C:\Users\mages\Desktop\parashield\Mobile-Interface-Builder\artifacts\gig-shield
+> node scripts/build.js
+
+Building static Expo Go deployment...
+Preparing build directories...
+Build: 1774849471228-22092
+Clearing Metro cache...
+Cache cleared
+Starting Metro...
+Setting EXPO_PUBLIC_DOMAIN=localhost
+C:\Users\mages\Desktop\parashield\Mobile-Interface-Builder\artifacts\gig-shield:
+ΓÇëERR_PNPM_RECURSIVE_RUN_FIRST_FAILΓÇë @workspace/gig-shield@0.0.0 build: `node scripts/build.js`
+Exit status 1

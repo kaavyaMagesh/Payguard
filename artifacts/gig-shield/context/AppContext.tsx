@@ -93,7 +93,7 @@ interface AppContextType extends AppState {
   selectPolicyTier: (tier: PolicyTier) => void;
 }
 
-const STORAGE_KEY = "gigshield_v1";
+const STORAGE_KEY = "payguard_v1";
 
 const defaultWeather: WeatherData = {
   aqi: 228,
